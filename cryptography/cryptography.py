@@ -10,8 +10,8 @@ def encryptImage(img):
     # Конвертация в черно-белое представление
     im_bw = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 21, 4)
     arr = np.array(im_bw, np.uint8)
-    os.remove(os.environ.get(PATH) + os.pathsep  +  'original_bw.jpg')
-    cv2.imwrite(os.environ.get(PATH) + os.pathsep  +  'original_bw.jpg', arr)
+    os.remove('/home/djikey/IdeaProjects/computer_vision/original_bw.jpg')
+    cv2.imwrite('/home/djikey/IdeaProjects/computer_vision/original_bw.jpg', arr)
 
 
     black_ciphers = [
@@ -77,13 +77,13 @@ def decryptImage(privateEncrypted: dict, publicEncrypted: dict, shape: tuple):
     return np.array(acc)
 
 
-img = cv2.imread(os.environ.get(PATH) + os.pathsep  +  'original.jpg')
+img = cv2.imread('/home/djikey/IdeaProjects/computer_vision/original.jpg')
 
 privateEncrypted, publicEncrypted = encryptImage(img)
 decrypted_as_np_array = decryptImage(privateEncrypted, publicEncrypted, img.shape)
 
-os.remove(os.environ.get(PATH) + os.pathsep  +  'encoded_bw.jpg')
-cv2.imwrite(os.environ.get(PATH) + os.pathsep  +  'encoded_bw.jpg', decrypted_as_np_array)
+os.remove('/home/djikey/IdeaProjects/computer_vision/encoded_bw.jpg')
+cv2.imwrite('/home/djikey/IdeaProjects/computer_vision/encoded_bw.jpg', decrypted_as_np_array)
 
 
 
