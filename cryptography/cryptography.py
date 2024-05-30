@@ -4,6 +4,33 @@ import cv2
 import numpy as np
 import os
 
+def saveShares(encrypted: dict, shape: tuple, dictFileName:str):
+    rows, cols, _ = shape
+    acc = []
+    buffer1 = []
+    buffer2 = []
+    for coordinate, encoded_pixel_in_private in encrypted.items():
+
+        x,y = coordinate
+        if y == cols - 1:
+            buffer1.append(encoded_pixel_in_private[0]*255)
+            buffer1.append(encoded_pixel_in_private[1]*255)
+            buffer2.append(encoded_pixel_in_private[2]*255)
+            buffer2.append(encoded_pixel_in_private[3]*255)
+            acc.append(buffer1)
+            acc.append(buffer2)
+            buffer1 = []
+            buffer2 = []
+        else:
+            buffer1.append(encoded_pixel_in_private[0]*255)
+            buffer1.append(encoded_pixel_in_private[1]*255)
+            buffer2.append(encoded_pixel_in_private[2]*255)
+            buffer2.append(encoded_pixel_in_private[3]*255)
+    npArrayImage = np.array(acc)
+    os.remove('/home/djikey/IdeaProjects/computer_vision/' + dictFileName)
+    cv2.imwrite('/home/djikey/IdeaProjects/computer_vision/' + dictFileName, npArrayImage)
+
+
 def encryptImage(img):
     # Конвертация в оттенки серого
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -44,6 +71,9 @@ def encryptImage(img):
             encr_private, encr_public = encrypt(pixel)
             privateEncrypted[(x, y)] = encr_private
             publicEncrypted[(x, y)] = encr_public
+
+    saveShares(privateEncrypted, img.shape, 'private_shares.jpg')
+    saveShares(publicEncrypted, img.shape, 'public_shares.jpg')
 
     return (privateEncrypted, publicEncrypted)
 
